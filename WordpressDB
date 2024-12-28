@@ -1,0 +1,62 @@
+# Docker Compose File:
+
+version: '3.9'
+services:
+        db:
+           image: mysql
+           ports:
+                - 3306
+           volumes:
+                - myvol:/var/lib/sql
+           networks:
+                - mynet
+           environments:
+                - MYSQL_ROOT_PASSWORD=Pass@123
+                - MYSQL_DATABASE=wordpressdb
+
+        website:
+           image: wordpress
+           ports:
+                - 80:80
+           networks:
+                - mynet
+           environments:
+                - WORDPRESS_DB_HOST=db
+                - WORDPRESS_DB_USER=root
+                - WORDPRESS_DB_PASSWORD=Pass@123
+                - WORDPRESS_DB_NAME=wordpressdb
+
+networks:
+   mynet:
+      driver: bridge
+volumes:
+   myvol:
+
+
+
+# Process:-
+
+DOCKER COMPOSE USING BUILD WORDPRESS DB
+
+ 1) install DOCKER-COMPOSE 
+	curl -SL https://github.com/docker/compose/releases/download/v2.30.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+
+2) give execute permission for docker-copose file path
+	sudo chmod +x /usr/local/bin/docker-compose
+			OR
+	sudo chmod 755 /usr/local/bin/docker-compose
+
+3) create folder "wordpress"
+	mkdir wordpress
+
+4)create "wordpress.yml" file and write that file in yml 
+	>>nano wordpress.yml
+	 (code is available in git and PC)
+
+5) run the "wordpress.yml" for create wordpress and db container at a time (automation)
+	docker-compose -f wordpress.yml up
+
+			OR
+
+ run the service in background of "wordpress.yml" for create wordpress and db container at a time (automation) 
+	docker-compose -f wordpress.yml up -d
